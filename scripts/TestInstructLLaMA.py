@@ -28,7 +28,7 @@ device = GetLowestGPU()
 
 def format_chat(row):
     row_json_inp = [{"role": "user", "content": row["Patient"]}]
-    row_json_out = [{"role": "doctor", "content": row["Doctor"]}]
+    row_json_out = [{"role": "assistant", "content": row["Doctor"]}]
     row["input"] = tokenizer.apply_chat_template(row_json_inp, tokenize=False)
     row["target"] = tokenizer.apply_chat_template(row_json_out, tokenize=False)
     return row
@@ -44,8 +44,8 @@ def preprocess_data(examples):
     return tokenized_data
 
 if __name__ == "__main__":
-
-    ## ------------------------------`---------------
+``
+    ## ---------------------------------------------
     ## Instantiate the Model, Tokenizer, and Dataset
     ## ---------------------------------------------
 

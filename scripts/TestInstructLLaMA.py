@@ -44,7 +44,7 @@ def preprocess_data(examples):
     return tokenized_data
 
 if __name__ == "__main__":
-``
+    
     ## ---------------------------------------------
     ## Instantiate the Model, Tokenizer, and Dataset
     ## ---------------------------------------------

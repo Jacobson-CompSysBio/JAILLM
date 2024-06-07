@@ -44,140 +44,140 @@ def preprocess_data(examples):
     
     return tokenized_data
 
+if name == "__main__":
 
+    ## INSTANTIATE MODEL & DATASET
 
-## INSTANTIATE MODEL & DATASET
+    # options
+    model_path = "meta-llama/Meta-Llama-3-8B"
+    dataset_path = "allenai/peS2o"
 
-# options
-model_path = "meta-llama/Meta-Llama-3-8B"
-dataset_path = "allenai/peS2o"
+    # load tokenizer and model
+    pipeline = pipeline('text-generation', 
+                        model=model_path,
+                        model_kwargs={'torch_dtype': torch.bfloat16},
+                        device_map = 'auto'
+                        )
 
-# load tokenizer and model
-pipeline = pipeline('text-generation', 
-                    model=model_path,
-                    model_kwargs={'torch_dtype': torch.bfloat16},
-                    device_map = 'auto'
-                    )
+    # load dataset
+    raw_dataset = load_dataset(dataset_path, "v2", streaming=True, trust_remote_code=True)
 
-# load dataset
-raw_dataset = load_dataset(dataset_path, "v2", streaming=True, trust_remote_code=True)
+    # check format of data
+    raw_dataset
 
-# check format of data
-raw_dataset
+    ## PREPROCESS DATA
 
-## PREPROCESS DATA
+    # add special tokens to tokenizer
+    pipeline.tokenizer.pad_token = pipeline.tokenizer.eos_token
+    pipeline.model.resize_token_embeddings(len(pipeline.tokenizer))
 
-# add special tokens to tokenizer
-pipeline.tokenizer.pad_token = pipeline.tokenizer.eos_token
-pipeline.model.resize_token_embeddings(len(pipeline.tokenizer))
+    tokenized_dataset = raw_dataset.map(preprocess_data,
+                                        batched=True,
+                                        remove_columns=raw_dataset['train'].column_names,)
+    tokenized_dataset.with_format("torch")
 
-tokenized_dataset = raw_dataset.map(preprocess_data,
-                                    batched=True,
-                                    remove_columns=raw_dataset['train'].column_names,)
-tokenized_dataset.with_format("torch")
+    # check tokenized dataset output
+    tokenized_dataset
 
-# check tokenized dataset output
-tokenized_dataset
+    ## CREATE DATALOADERS
 
-## CREATE DATALOADERS
+    # instantiate data collator
+    data_collator = DataCollatorWithPadding(tokenizer=pipeline.tokenizer)
 
-# instantiate data collator
-data_collator = DataCollatorWithPadding(tokenizer=pipeline.tokenizer)
+    train_dataloader = DataLoader(tokenized_dataset['train'],
+                                batch_size=8, 
+                                collate_fn=data_collator,
+                                num_workers=20)
 
-train_dataloader = DataLoader(tokenized_dataset['train'],
-                              batch_size=8, 
-                              collate_fn=data_collator,
-                              num_workers=20)
+    val_dataloader = DataLoader(tokenized_dataset['validation'],
+                                batch_size=8,
+                                collate_fn=data_collator,
+                                num_workers=2)
 
-val_dataloader = DataLoader(tokenized_dataset['validation'],
-                            batch_size=8,
-                            collate_fn=data_collator,
-                            num_workers=2)
+    ## TRAIN MODEL
 
-## TRAIN MODEL
+    # run a test prediction
+    messages = ["Network biology is"]
 
-# run a test prediction
-messages = ["Network biology is"]
+    terminators = [
+        pipeline.tokenizer.eos_token_id,
+        pipeline.tokenizer.convert_tokens_to_ids("<|eot_id|>")
+    ]
 
-terminators = [
-    pipeline.tokenizer.eos_token_id,
-    pipeline.tokenizer.convert_tokens_to_ids("<|eot_id|>")
-]
+    outputs = pipeline(
+        messages,
+        max_new_tokens=256,
+        eos_token_id=terminators,
+        do_sample=True,
+        temperature=0.6,
+        top_p=0.9,
+    )
+    print(outputs)
 
-outputs = pipeline(
-    messages,
-    max_new_tokens=256,
-    eos_token_id=terminators,
-    do_sample=True,
-    temperature=0.6,
-    top_p=0.9,
-)
-print(outputs)
+    # options
+    optimizer = AdamW(pipeline.model.parameters(), lr=1e-5)
+    num_epochs = 3
 
-# options
-optimizer = AdamW(pipeline.model.parameters(), lr=1e-5)
-num_epochs = 3
-
-# loop
-for epoch in range(num_epochs):
-    
-    print("=====================")
-    print(f"Epoch {epoch + 1}")
-    print("=====================")
-
-    # set model to train mode
-    pipeline.model.train()
-
-    # initialize train loss, val loss
-    running_train_loss = 0.0
-    running_val_loss = 0.0
-
-    # loop through train data
-    print("Training...")
-    i = 0
-    for batch in train_dataloader:
-
-        # grab batch and map to device
-        batch = {k: v.to(device) for k, v in batch.items()}
-
-        # forward pass
-        outputs = pipeline.model(**batch)
-        loss = outputs.loss
-        print(f"batch loss: {loss:.4f}\r", end="")
-
-        running_train_loss += loss.item()
-
-        # backward pass
-        loss.backward()
-
-        # update optimizer
-        optimizer.step()
-
-        # zero gradients
-        optimizer.zero_grad()
-
-        i += 1
-        if i % 1000 == 0:
-            print(f"Processed {i} batches; Printing example response...")
-            print(pipeline(messages, max_length=100, truncation=True))
+    # loop
+    for epoch in range(num_epochs):
         
-    # set model to eval mode
-    pipeline.model.eval()
+        print("=====================")
+        print(f"Epoch {epoch + 1}")
+        print("=====================")
 
-    for batch in val_dataloader:
-        batch = {k: v.to(device) for k, v in batch.items()}
-        with torch.no_grad():
+        # set model to train mode
+        pipeline.model.train()
+
+        # initialize train loss, val loss
+        running_train_loss = 0.0
+        running_val_loss = 0.0
+
+        # loop through train data
+        print("Training...")
+        i = 0
+        for batch in train_dataloader:
+
+            # grab batch and map to device
+            batch = {k: v.to(device) for k, v in batch.items()}
+
+            # forward pass
             outputs = pipeline.model(**batch)
             loss = outputs.loss
-            running_val_loss += loss.item()
-        
-    val_loss = running_val_loss / len(val_dataloader)
+            print(f"batch loss: {loss:.4f}\r", end="")
 
-    print("Printing example response...")
-    print(pipeline(messages, max_length=100, truncation=True))
+            running_train_loss += loss.item()
 
-    train_loss = running_train_loss / len(train_dataloader)
-    print(f"Avg. Train Loss: {train_loss:.4f}, Avg. Val Loss: {val_loss:.4f}")
-    # print("Evaluation metrics:", metric.compute())
+            # backward pass
+            loss.backward()
 
-print("Training Complete!")
+            # update optimizer
+            optimizer.step()
+
+            # zero gradients
+            optimizer.zero_grad()
+
+            i += 1
+            if i % 1000 == 0:``
+                print(f"Processed {i} batches; Printing example response...")
+                print(pipeline(messages, max_length=100, truncation=True))
+            
+        # set model to eval mode
+        pipeline.model.eval()
+
+        for batch in val_dataloader:
+            batch = {k: v.to(device) for k, v in batch.items()}
+            with torch.no_grad():
+                outputs = pipeline.model(**batch)
+                loss = outputs.loss
+                running_val_loss += loss.item()
+            
+        val_loss = running_val_loss / len(val_dataloader)
+
+        print("Printing example response...")
+        print(pipeline(messages, max_length=100, truncation=True))
+
+        train_loss = running_train_loss / len(train_dataloader)
+        print(f"Avg. Train Loss: {train_loss:.4f}, Avg. Val Loss: {val_loss:.4f}")
+        # print("Evaluation metrics:", metric.compute())
+
+    print("Training Complete!")

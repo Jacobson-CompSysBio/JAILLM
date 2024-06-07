@@ -157,7 +157,7 @@ if name == "__main__":
             optimizer.zero_grad()
 
             i += 1
-            if i % 1000 == 0:``
+            if i % 1000 == 0:
                 print(f"Processed {i} batches; Printing example response...")
                 print(pipeline(messages, max_length=100, truncation=True))
             

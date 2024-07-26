@@ -42,6 +42,29 @@ Model-Based scorers rely on NLP models to evaluate outputs. They are comparative
 
 1. **NLI (Natural Language Inference):** Uses a natural language model to assign a number, ranging from 0-1, the output's logical coherence, with 1 being more coherent and 0 being less.
 
-2. **BLEURT (BLEU with Representations from Transformers):** Uses a pre-trained model like [BERT]() to score llm outputs based on some ground truth
+2. **BLEURT (BLEU with Representations from Transformers):** Uses a pre-trained model like [BERT](https://en.wikipedia.org/wiki/BERT_(language_model)) to score llm outputs based on some ground truth
 
 NLI may struggle to understand long context, while BLEURT is only as good as the quality of its training data, and training both for specific purposes may be time-consuming.
+
+3. **G-Eval Framework:** [G-Eval](https://arxiv.org/pdf/2303.16634) is a framework which uses LLMs to evaluate LLM output. The algorithm:
+    1. Introduce evaluation task to LLM (e.g. rate this output from 1-5 based on coherence)
+    2. Give a definition for your criteria (e.g. Coherence - collective quality of all sentence in actual output)
+    3. Create a prompt by combining eval. steps with all arguments required for evaluation
+        * this is similar to the graph evaluation process
+    4. Ask the model to generate a score
+4. **Prometheus:** Similar to G-Eval, following the same principle. There are some differences:
+    * Instead of using a base LLM, Prometheus is fine-tuned
+    * The scoring rubric is provided in the prompt
+    * Available on HF
+
+### Combination Scorers
+Combination scorers bridge the gap between statistical and model-based scorers.
+
+1. **GPTScore:** Uses the conditional probability of generating the target text as an evaluation metric.
+
+2. **SelfCheckGPT:** Used for hallucination detection. Generate many samples of the sample passage, and ask if the passage in question corresponds to the samples. The score reflects how often the sentence is supported by samples.`
+
+3. **QAG:** Turns an output into a specific questions with yes-no answers, and compares them to a ground-truth answer.
+
+## 2. Biology-Specific Metrics
+So, how do we use these metrics to evaluate biology-specific tasks?

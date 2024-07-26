@@ -21,7 +21,7 @@ def convert_to_nx(filename, graph_type = nx.Graph):
                              data=(('weight', float),))
     return graph
 
-def network_to_text(G):
+def nx_to_text(G):
     """
     Function to convert a networkx graph object to a list of nodes and edges
 

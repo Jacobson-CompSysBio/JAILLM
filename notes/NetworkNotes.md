@@ -10,7 +10,7 @@ Node2Vec is a framework for continuous, learned, and unsupervised embedding of n
     * **Walk Length (l):**
 2. Repeat the random walk *r* times
 3. After repetition, optimize the objective Skip-Gram function with SGD
-    * Maximize the log-probability of observing a network neighorhood (*N<sub>S</sub>(u)*) for node *U* conditioned on its fe`ature representation *f*.
+    * Maximize the log-probability of observing a network neighorhood (*N<sub>S</sub>(u)*) for node *U* conditioned on its feature representation *f*.
 
 The resulting output is a *d*-dimensional embedding of each node in the network.
 

@@ -21,7 +21,7 @@ Model parallelism splits the model itself across multiple machines, where these 
 
 ## Synchronization
 Since things are distributed, how do we end up synchronizing them again?
-`
+
 ### Parameter Server
 
 ### All-reduce

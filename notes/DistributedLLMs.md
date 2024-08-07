@@ -9,16 +9,19 @@ We broadly define the two major subsets of distributed training: data parallelis
 
 ## Data Parallelism
 
-In data parallelism, 
+![data parallelism](images/dataparallelism.webp "Data Parallelism")
 
+In data parallelism, training data is split across multiple machines, and a copy of the model is made on each machine and trained with its own portion of the data. Models are then synchronized (see [Synchronization](#synchronization)) to ensure that they have the same weights.
 
 ## Model Parallelism
 
 ![model parallelism](images/modelparallelism.webp "Model Parallelism")
 
-## Synchronization
-Since things are distributed, how do we end up synchronizing them again?`
+Model parallelism splits the model itself across multiple machines, where these chunks are trained separately. 
 
+## Synchronization
+Since things are distributed, how do we end up synchronizing them again?
+`
 ### Parameter Server
 
 ### All-reduce

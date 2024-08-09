@@ -29,4 +29,7 @@ If we can compute the Fourier Transform
 
 ## 3. [GraphLLM Embedding](https://arxiv.org/abs/2310.05845)
 
+# Other Resources
+[A Gentle Introduction to Graph Neural Networks](https://distill.pub/2021/gnn-intro/)
+[Understanding Convolutions on Graphs](https://distill.pub/2021/understanding-gnns/)
 

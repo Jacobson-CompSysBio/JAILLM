@@ -16,9 +16,16 @@ The resulting output is a *d*-dimensional embedding of each node in the network.
 
 ## 2 [Simple GNN](https://distill.pub/2021/gnn-intro/)
 
-It's possible to embed graphs with just an MLP architecture. GNNs are comprised of "blocks," with separate layers embedding the nodes *v*, edges *e*, and possibly the global state *u*.
-`
+It's possible to embed graphs with just an MLP architecture. GNNs are comprised of "blocks," with separate layers embedding the nodes *v*, edges *e*, and possibly the global state *u*. Layers can then be stacked.
+
 ![Simple GNN](images/simpleGNN.png "Simple GNN")
+
+We utilize pooling in order to make node- or edge-level predictions. The pooling process is as follows:
+1. *gather* embeddings of each item to be pooled and concatenate in a matrix
+2. *aggregate* the gathered embeddings (usually with a sum)
+
+### 2.1 Message Passing
+
 
 
 
@@ -37,7 +44,4 @@ If we can compute the Fourier Transform
 
 ## 4. [GraphLLM Embedding](https://arxiv.org/abs/2310.05845)
 
-# Other Resources
-[A Gentle Introduction to Graph Neural Networks](https://distill.pub/2021/gnn-intro/)
-[Understanding Convolutions on Graphs](https://distill.pub/2021/understanding-gnns/)
 

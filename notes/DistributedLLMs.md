@@ -37,3 +37,18 @@ With all-reduce, each node both computes and stores gradients. Different algorit
 One downside of traditional data parallel is that a model must be copied to each device in order for training to occur. However, FSDP circumvents this by sharding the model as well as the data. Meta describes the process as such:
 
 >*In FSDP, only a shard of the model is present on a GPU. Then, locally, all weights are gathered from the other GPUs — by means of an all-gather step — to calculate the forward pass. This gathering of weights is then performed again before the backward pass. After that backward pass, the local gradients are averaged and sharded across the GPUs by means of a reduce-scatter step, which allows each GPU to update its local weight shard*.
+
+```
+FSDP forward pass:
+    for layer_i in layers:
+        all-gather full weights for layer_i
+        forward pass for layer_i
+        discard full weights for layer_i
+
+FSDP backward pass:
+    for layer_i in layers:
+        all-gather full weights for layer_i
+        backward pass for layer_i
+        discard full weights for layer_i
+        reduce-scatter gradients for layer_i
+```

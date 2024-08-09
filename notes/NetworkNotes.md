@@ -14,7 +14,7 @@ Node2Vec is a framework for continuous, learned, and unsupervised embedding of n
 
 The resulting output is a *d*-dimensional embedding of each node in the network.
 
-## 2 [Simple GNN](https://distill.pub/2021/gnn-intro/)
+## 2. [Simple GNN](https://distill.pub/2021/gnn-intro/)
 
 It's possible to embed graphs with just an MLP architecture. GNNs are comprised of "blocks," with separate layers embedding the nodes *v*, edges *e*, and possibly the global state *u*. Layers can then be stacked.
 
@@ -24,7 +24,7 @@ We utilize pooling in order to make node- or edge-level predictions. The pooling
 1. *Gather* embeddings of each item to be pooled and concatenate in a matrix
 2. *Aggregate* the gathered embeddings (usually with a sum)
 
-### 2.1 Message Passing
+### 2.1. Message Passing
 Message passing allows neighboring nodes/edges to exchange information, utilizing the connectivity structure of the graph for learning.
 1. For all nodes in the graph, *gather* neighboring node embeddings (messages) in the same way as the pooling process
 2. *Aggregate* messages with a sum
@@ -32,9 +32,7 @@ Message passing allows neighboring nodes/edges to exchange information, utilizin
 
 Message passing can be though of similarly to a convolution operation; node/edge objects near others influence their states.
 
-
-
-## 2.5 [Graph Convolutional Network (GCN)](https://arxiv.org/abs/1609.02907)
+## 2.5. [Graph Convolutional Network (GCN)](https://arxiv.org/abs/1609.02907)
 
 ![GCN](images/GCN.png "GCN")
 

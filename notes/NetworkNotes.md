@@ -21,11 +21,16 @@ It's possible to embed graphs with just an MLP architecture. GNNs are comprised 
 ![Simple GNN](images/simpleGNN.png "Simple GNN")
 
 We utilize pooling in order to make node- or edge-level predictions. The pooling process is as follows:
-1. *gather* embeddings of each item to be pooled and concatenate in a matrix
-2. *aggregate* the gathered embeddings (usually with a sum)
+1. *Gather* embeddings of each item to be pooled and concatenate in a matrix
+2. *Aggregate* the gathered embeddings (usually with a sum)
 
 ### 2.1 Message Passing
+Message passing allows neighboring nodes/edges to exchange information, utilizing the connectivity structure of the graph for learning.
+1. For all nodes in the graph, *gather* neighboring node embeddings (messages) in the same way as the pooling process
+2. *Aggregate* messages with a sum
+3. Pass pooled messages through an *update function*, which can be a neural network.
 
+Message passing can be though of similarly to a convolution operation; node/edge objects near others influence their states.
 
 
 
@@ -43,5 +48,10 @@ If we can compute the Fourier Transform
 
 
 ## 4. [GraphLLM Embedding](https://arxiv.org/abs/2310.05845)
+
+# Other  Considerations
+It is common practice to batch process observations in neural networks. However, graphs have variable sizes, so this can be difficult. As stated in [this article](https://distill.pub/2021/gnn-intro/), the solution is to
+
+> "...create subgraphs that preserve essential properties of the larger graph. This graph sampling operation is highly dependent on context and involves sub-selecting nodes and edges from a graph. These operations might make sense in some contexts (citation networks) and in others, these might be too strong of an operation (molecules, where a subgraph simply represents a new, smaller molecule)."
 
 

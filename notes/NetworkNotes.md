@@ -14,7 +14,15 @@ Node2Vec is a framework for continuous, learned, and unsupervised embedding of n
 
 The resulting output is a *d*-dimensional embedding of each node in the network.
 
-## 2. [Graph Convolutional Network (GCN)](https://arxiv.org/abs/1609.02907)
+## 2 [Simple GNN](https://distill.pub/2021/gnn-intro/)
+
+It's possible to embed graphs with just an MLP architecture. GNNs are comprised of "blocks," with separate layers embedding the nodes *v*, edges *e*, and possibly the global state *u*.
+`
+![Simple GNN](images/simpleGNN.png "Simple GNN")
+
+
+
+## 2.5 [Graph Convolutional Network (GCN)](https://arxiv.org/abs/1609.02907)
 
 ![GCN](images/GCN.png "GCN")
 
@@ -24,9 +32,9 @@ To reformulate convolutions for graphs, we use the [*convolution theorem*](https
 
 If we can compute the Fourier Transform
 
-## 2.5. [Graph Autoencoder (GAE)](https://arxiv.org/abs/1611.07308)
+## 3. [Graph Autoencoder (GAE)](https://arxiv.org/abs/1611.07308)
 
 
-## 3. [GraphLLM Embedding](https://arxiv.org/abs/2310.05845)
+## 4. [GraphLLM Embedding](https://arxiv.org/abs/2310.05845)
 
 

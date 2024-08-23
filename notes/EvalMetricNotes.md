@@ -70,3 +70,9 @@ Combination scorers bridge the gap between statistical and model-based scorers.
 
 ## 2. Biology-Specific Metrics
 So, how do we use these metrics to evaluate biology-specific tasks?
+
+* Use a "Standard" gene set (ones that are used in GRIN/MENTOR papers)
+* `DeepEval` package provides functionality with HF and LlamaIndex  
+* Start with pairwise interactions, move to include more topology
+* Evaluate with multiple networks (single-cell and bulk networks) to give multiple perspectives
+* We need to sit down and assign clades to people

@@ -66,5 +66,23 @@ Combination scorers bridge the gap between statistical and model-based scorers.
 
 3. **QAG:** Turns an output into a specific questions with yes-no answers, and compares them to a ground-truth answer.
 
-## 2. Biology-Specific Metrics
-So, how do we use these metrics to evaluate biology-specific tasks?
+## 2. Biology-Specific Evaluation
+In order to evaluate the model's biology specific knowledge, we will choose a *gold-standard* gene set, assign a subset of genes to various lab members, and have them write questions and answers to produce a supervised output.
+
+* For a specific gene interpretation, see if LLM can capture the summary made by NCBI
+
+* For interactions, scrape co-occurence from web
+
+* For function, scrape GO ontology
+    * Different levels:
+        1. Biological proces
+        2. Molecular function
+    * Can compute content level metrics as well
+    * Examine a different level of depth
+
+* We need to think about formatting
+    * Create something similar to `DatasetDict`
+    * Various types of question tags:
+        1. `SingleGene`
+        2. `GeneSet`
+        3. `Interaction`

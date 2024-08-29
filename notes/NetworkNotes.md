@@ -40,12 +40,12 @@ Much like a traditional convolutional neural network, a GCN is designed to extra
 
 To reformulate convolutions for graphs, we use the [*convolution theorem*](https://en.wikipedia.org/wiki/Convolution_theorem), which states that the [Fourier Transform](https://en.wikipedia.org/wiki/Fourier_transform) of a convolution of two functions is equal to the pointwise product of their Fourier Transforms. 
 
-If we can compute the Fourier Transform
-
 ## 3. [Graph Autoencoder (GAE)](https://arxiv.org/abs/1611.07308)
 
 
-## 4. [GraphLLM Embedding](https://arxiv.org/abs/2310.05845)
+## 4. [GAT Embedding](https://arxiv.org/abs/2310.05845)
+
+Graph Attention Transformers (GAT) are the underpinning of the Graph-LLM model. The advantage of GATs over spectral convolution methods are that they are more scalable, more intuitive, work on subnetworks, and excel at inductive reasoning problems. Here are a few examples of GAT code:
 
 [GAT Tutorial 1](https://www.youtube.com/watch?v=AWkPjrZshug)
 [GAT Tutorial 2](https://github.com/gordicaleksa/pytorch-GAT)

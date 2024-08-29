@@ -1,8 +1,10 @@
 # Evaluation Metrics
 This markdown file contains information about various evaluation metrics for LLMs.
-We broadly divide the metrics into two categories:  
-    1. General Evaluation Metrics
-    2. Biology-Specific Metrics
+We broadly divide the metrics into two categories:
+
+1. General Evaluation Metrics
+2. Biology-Specific Metrics
+
 In each section, we include a description of the metrics, how they are calculated, and how to implement them in python.
 HuggingFace has a [`metrics` package](https://huggingface.co/docs/datasets/en/about_metrics) which contains many of these.
 

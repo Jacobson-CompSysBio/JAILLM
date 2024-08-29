@@ -47,6 +47,11 @@ If we can compute the Fourier Transform
 
 ## 4. [GraphLLM Embedding](https://arxiv.org/abs/2310.05845)
 
+[GAT Tutorial 1](https://www.youtube.com/watch?v=AWkPjrZshug)
+[GAT Tutorial 2](https://github.com/gordicaleksa/pytorch-GAT)
+[GAT Tutorial 3](https://towardsai.net/p/l/graph-attention-networks-paper-explained-with-illustration-and-pytorch-implementation)
+[GAT PyG Documentation](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.models.GAT.html)
+
 # Other  Considerations
 It is common practice to batch process observations in neural networks. However, graphs have variable sizes, so this can be difficult. As stated in [this article](https://distill.pub/2021/gnn-intro/), the solution is to
 

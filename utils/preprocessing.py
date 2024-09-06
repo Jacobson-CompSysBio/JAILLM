@@ -117,9 +117,9 @@ def tokenize_data(examples,
         if labels[i][-1] != pipeline_name.tokenizer.pad_token_id:
             labels[i] = labels[i][1:] + [pipeline_name.tokenizer.pad_token_id]
         else:
-            labels[i] = labels[i][1:] + [-100]
+            labels[i] = labels[i][1:] + [pipeline_name.tokenizer.pad_token_id]
 
-    labels = [[-100 if x == pipeline_name.tokenizer.pad_token_id else x for x in y] for y in labels]
+    labels = [[pipeline_name.tokenizer.pad_token_id if x == pipeline_name.tokenizer.pad_token_id else x for x in y] for y in labels]
     tokenized_data['labels'] = labels
     
     return tokenized_data

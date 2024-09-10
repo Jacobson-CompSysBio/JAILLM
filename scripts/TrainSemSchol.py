@@ -37,7 +37,7 @@ peft_config = LoraConfig(
 pipeline = pipeline('text-generation', 
                     model=model_path,
                     model_kwargs={'torch_dtype': torch.bfloat16},
-                    device_map = 'auto'
+                    device_map = accelerator.device
                     )
 
 pipeline.model = get_peft_model(pipeline.model, peft_config)

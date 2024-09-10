@@ -2,7 +2,6 @@
 import sys, os
 import torch 
 import numpy as np
-import evaluate
 from trl import SFTTrainer, setup_chat_format
 from transformers import (pipeline,
                           AutoTokenizer,

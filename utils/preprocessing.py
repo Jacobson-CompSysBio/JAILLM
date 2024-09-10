@@ -97,7 +97,8 @@ def format_network_chat(row,
 
 def tokenize_data(examples,
                   pipeline_name,
-                  type: str = 'nextchar'):
+                  type: str = 'nextchar',
+                  max_length: int = 1024):
     
     """
     Function to preprocess the data for training on next-character prediction
@@ -115,11 +116,11 @@ def tokenize_data(examples,
         tokenized_data = pipeline_name.tokenizer(text=examples['text'],
                                padding='max_length', 
                                truncation=True, 
-                               max_length=1024)
+                               max_length=max_length)
     elif type == 'chat':
         tokenized_data= pipeline_name.tokenizer(text=examples['input'],
                                                 text_target=examples['output'],
                                                 padding='max_length', 
                                                 truncation=True, 
-                                                max_length=1024)
+                                                max_length=max_length)
     return tokenized_data

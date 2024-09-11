@@ -137,7 +137,7 @@ def main():
                 pipeline.model.train()
 
                 # grab batch and map to device
-                train_batch = {k: v.to(device) for k, v in train_batch.items()}
+                train_batch = {k: v.to(accelerator.device) for k, v in train_batch.items()}
 
                 # forward pass
                 outputs = pipeline.model(train_batch['input_ids'], 
@@ -165,7 +165,7 @@ def main():
                 # set model to eval mode
                 pipeline.model.eval()
                 # loop through val data
-                val_batch = {k: v.to(device) for k, v in val_batch.items()}
+                val_batch = {k: v.to(accelerator.device) for k, v in val_batch.items()}
                 with torch.no_grad():
                     outputs = pipeline.model(val_batch['input_ids'], 
                                             labels=val_batch['input_ids'],
@@ -198,23 +198,21 @@ def main():
                 
                 if i == num_batches:
                     print(f"Reached {num_batches} batches; breaking...")
-                    continue
+                    break
         
         train_loss = running_train_loss / num_batches
         val_loss = running_val_loss / num_batches
-        train_loss = running_train_loss / len(train_dataloader)
+        train_loss = running_train_loss / num_batches
         print(f"Avg. Train Loss: {train_loss:.4f}, Avg. Val Loss: {val_loss:.4f}")
 
-        # save model checkpoint
-        checkpoint = {'model': pipeline.model.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-                    'epoch': epoch,
-                    'iter_num': i,
-                    'best_val_loss': best_val_loss,
-                    }
-        print(f"")
-        torch.save(checkpoint, checkpoint_path.format(i))
-
+    # save model checkpoint
+    checkpoint = {'model': pipeline.model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'epoch': epoch,
+                'iter_num': i,
+                'best_val_loss': best_val_loss,
+                }
+    torch.save(checkpoint, checkpoint_path.format(i))
     print("Training Complete!")
 
 if __name__ == "__main__":

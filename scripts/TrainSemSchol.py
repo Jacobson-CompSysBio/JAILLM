@@ -25,8 +25,8 @@ device = GetLowestGPU()
 
 ## INIT MODEL
 # options
-model_path = "meta-llama/Meta-Llama-3-8B"
-dataset_path = "allenai/peS2o"
+model_path = "meta-llama/Meta-Llama-3-8B" # model path from hf
+dataset_path = "allenai/peS2o" # dataset path from hf
 
 accelerator = Accelerator()
 
@@ -106,9 +106,7 @@ def main():
 
     with open(log_path, 'w') as f: 
         f.write(f'epoch,iter_num,train_loss,val_loss\n')
-    
-    # run a test prediction
-    text = ["Systems biology is the study of"]
+
 
     terminators = [
         pipeline.tokenizer.eos_token_id
@@ -116,8 +114,6 @@ def main():
 
     # loop
     for epoch in range(num_epochs):
-
-        clear_output(wait=True)
 
         print("=====================")
         print(f"Epoch {epoch + 1}")
